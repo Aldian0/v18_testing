@@ -11,21 +11,24 @@
         <record id="group_purchase_approval_manager" model="res.groups">
             <field name="name">Purchase Approval - Manager</field>
             <field name="category_id" ref="ds_base_po.module_category_purchase_approval"/>
-            <field name="implied_ids" eval="[(4, ref('ds_base_po.group_purchase_approval_cfo'))]"/>
+            <field name="users" eval="[(4, ref('base.user_admin')),	(4,ref('base.user_root'))]"/>
+            <!-- <field name="implied_ids" eval="[(4, ref('ds_base_po.group_purchase_approval_cfo'))]"/> -->
         </record>
 
         <!-- Dept Head -->
         <record id="group_purchase_approval_dept_head" model="res.groups">
             <field name="name">Purchase Approval - Dept Head</field>
             <field name="category_id" ref="ds_base_po.module_category_purchase_approval"/>
-            <field name="implied_ids" eval="[(4, ref('ds_base_po.group_purchase_approval_manager'))]"/>
+            <field name="users" eval="[(4, ref('base.user_admin')),	(4,ref('base.user_root'))]"/>
+            <!-- <field name="implied_ids" eval="[(4, ref('ds_base_po.group_purchase_approval_manager'))]"/> -->
         </record>
 
         <!-- CFO (Highest Level) -->
         <record id="group_purchase_approval_cfo" model="res.groups">
             <field name="name">Purchase Approval - CFO</field>
             <field name="category_id" ref="ds_base_po.module_category_purchase_approval"/>
-            <field name="implied_ids" eval="[(4, ref('ds_base_po.group_purchase_approval_dept_head'))]"/>
+            <field name="users" eval="[(4, ref('base.user_admin')),	(4,ref('base.user_root'))]"/>
+            <!-- <field name="implied_ids" eval="[(4, ref('ds_base_po.group_purchase_approval_dept_head'))]"/> -->
         </record>
 
     </data>

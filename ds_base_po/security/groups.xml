@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="module_category_purchase_approval" model="ir.module.category">
+            <field name="name">Purchase Approval Roles</field>
+            <field name="sequence">25</field>
+        </record>
+
+        <!-- Manager (Lowest Level) -->
+        <record id="group_purchase_approval_manager" model="res.groups">
+            <field name="name">Purchase Approval - Manager</field>
+            <field name="category_id" ref="ds_base_po.module_category_purchase_approval"/>
+            <field name="implied_ids" eval="[(4, ref('ds_base_po.group_purchase_approval_cfo'))]"/>
+        </record>
+
+        <!-- Dept Head -->
+        <record id="group_purchase_approval_dept_head" model="res.groups">
+            <field name="name">Purchase Approval - Dept Head</field>
+            <field name="category_id" ref="ds_base_po.module_category_purchase_approval"/>
+            <field name="implied_ids" eval="[(4, ref('ds_base_po.group_purchase_approval_manager'))]"/>
+        </record>
+
+        <!-- CFO (Highest Level) -->
+        <record id="group_purchase_approval_cfo" model="res.groups">
+            <field name="name">Purchase Approval - CFO</field>
+            <field name="category_id" ref="ds_base_po.module_category_purchase_approval"/>
+            <field name="implied_ids" eval="[(4, ref('ds_base_po.group_purchase_approval_dept_head'))]"/>
+        </record>
+
+    </data>
+</odoo>

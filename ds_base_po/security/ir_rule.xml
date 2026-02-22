@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Manager -->
+        <record id="purchase_order_manager_record_rule" model="ir.rule">
+            <field name="name">PO Manager Visibility</field>
+            <field name="model_id" ref="purchase.model_purchase_order"/>
+            <field name="domain_force">
+                ['|', ('create_uid', '=', user.id),
+                 ('state', '=', 'waiting_manager')]
+            </field>
+            <field name="groups" eval="[(4, ref('ds_base_po.group_purchase_approval_manager'))]"/>
+        </record>
+
+        <!-- Dept Head -->
+        <record id="purchase_order_dept_head_record_rule" model="ir.rule">
+            <field name="name">PO Dept Head Visibility</field>
+            <field name="model_id" ref="purchase.model_purchase_order"/>
+            <field name="domain_force">
+                ['|', ('create_uid', '=', user.id),
+                 ('state', '=', 'waiting_dept_head')]
+            </field>
+            <field name="groups" eval="[(4, ref('ds_base_po.group_purchase_approval_dept_head'))]"/>
+        </record>
+
+        <!-- CFO -->
+        <record id="purchase_order_cfo_record_rule" model="ir.rule">
+            <field name="name">PO CFO Visibility</field>
+            <field name="model_id" ref="purchase.model_purchase_order"/>
+            <field name="domain_force">
+                ['|', ('create_uid', '=', user.id),
+                 ('state', '=', 'waiting_cfo')]
+            </field>
+            <field name="groups" eval="[(4, ref('ds_base_po.group_purchase_approval_cfo'))]"/>
+        </record>
+
+    </data>
+</odoo>

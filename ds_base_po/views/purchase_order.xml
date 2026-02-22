@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+
+        <!-- purchase.order tree view -->
+        <record id="purchase_order_view_list" model="ir.ui.view">
+            <field name="name">purchase.order.view.list</field>
+            <field name="model">purchase.order</field>
+            <field name="arch" type="xml">
+                <list>
+                    <!-- Add your fields here -->
+                    <field name="state"/>
+                    <field name="rejection_reason"/>
+                </list>
+            </field>
+        </record>           
+
+        <record id="purchase_order_form_inherit_approval" model="ir.ui.view">
+            <field name="name">purchase.order.form.inherit.approval</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <header position="inside">
+                    <button name="action_submit_for_approval" string="Submit for Approval" type="object" 
+                            class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_reject_order" string="Reject" type="object" class="btn-danger"
+                            invisible="state not in ('to_approve_manager', 'to_approve_dept', 'to_approve_cfo')"/>
+                </header>
+
+                <xpath expr="//field[@name='notes']" position="after">
+                    <group invisible="state != 'rejected'">
+                        <field name="rejection_reason" readonly="1" decoration-danger="1"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_purchase_order_reject_wizard" model="ir.ui.view">
+            <field name="name">purchase.order.reject.wizard.form</field>
+            <field name="model">purchase.order.reject.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Alasan Penolakan">
+                    <sheet>
+                        <group>
+                            <field name="reason" placeholder="Masukkan alasan mengapa PO ditolak..."/>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button name="action_confirm_reject" string="Tolak PO" type="object" class="btn-danger"/>
+                        <button string="Batal" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_po_waiting_manager" model="ir.actions.act_window">
+            <field name="name">Waiting Manager Approval</field>
+            <field name="res_model">purchase.order</field>
+            <field name="view_mode">list,form</field>
+            <field name="domain">[('amount_total', '&lt;=', 5000000)]</field>
+        </record>
+
+        <record id="action_po_waiting_dept" model="ir.actions.act_window">
+            <field name="name">Waiting Dept Head Approval</field>
+            <field name="res_model">purchase.order</field>
+            <field name="view_mode">list,form</field>
+            <field name="domain">[('amount_total', '&gt;', 5000000),('amount_total', '&lt;=', 20000000)]</field>
+        </record>
+
+        <record id="action_po_waiting_cfo" model="ir.actions.act_window">
+            <field name="name">Waiting CFO Approval</field>
+            <field name="res_model">purchase.order</field>
+            <field name="view_mode">list,form</field>
+            <field name="domain">[('amount_total', '&gt;', 20000000)]</field>
+        </record>
+
+        <menuitem id="menu_po_waiting_manager" 
+                name="Waiting Manager" 
+                parent="order_menu_categ" 
+                action="action_po_waiting_manager" 
+                groups="ds_base_po.group_purchase_approval_manager"
+                sequence="10"/>
+
+        <menuitem id="menu_po_waiting_dept" 
+                name="Waiting Dept Head" 
+                parent="order_menu_categ" 
+                action="action_po_waiting_dept" 
+                groups="ds_base_po.group_purchase_approval_dept_head"
+                sequence="20"/>
+
+        <menuitem id="menu_po_waiting_cfo" 
+                name="Waiting CFO" 
+                parent="order_menu_categ" 
+                action="action_po_waiting_cfo"
+                groups="ds_base_po.group_purchase_approval_cfo"
+                sequence="30"/>
+    </data>
+</odoo>

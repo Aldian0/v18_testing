@@ -29,6 +29,13 @@
                             invisible="state != 'to_accept'"/>
                 </header>
 
+                <!-- LOCK PRODUCT LINES -->
+                <xpath expr="//field[@name='order_line']" position="attributes">
+                    <attribute name="readonly">
+                        state in ('purchase','done','cancel')
+                    </attribute>
+                </xpath>
+
                 <xpath expr="//field[@name='notes']" position="after">
                     <group invisible="state != 'rejected'">
                         <field name="rejection_reason" readonly="1" decoration-danger="1"/>
@@ -37,6 +44,22 @@
                 <!-- <field name="state" position="replace">
                     <field name="state" widget="statusbar" statusbar_visible="to_accept,draft,sent,purchase" readonly="1"/>
                 </field> -->
+            </field>
+        </record>
+
+        <record id="purchase_order_revision_button" model="ir.ui.view">
+            <field name="name">purchase.order.revision.button</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//header" position="inside">
+                    <button name="action_create_revision"
+                            string="Create Revision"
+                            type="object"
+                            class="btn-primary"/>
+                </xpath>
+
             </field>
         </record>
 
@@ -57,6 +80,8 @@
                 </form>
             </field>
         </record>
+
+
 
         <record id="action_po_waiting_manager" model="ir.actions.act_window">
             <field name="name">Waiting Manager Approval</field>
@@ -79,7 +104,7 @@
             <field name="name">Waiting CFO Approval</field>
             <field name="res_model">purchase.order</field>
             <field name="view_mode">list,form</field>
-            <field name="domain">[('amount_total', '&gt;', 20000000), ('state', '=', 'to_accept')]</field>
+            <field name="domain">[('amount_total', '&gt;', 20000000)]</field>
             <field name="context">{'create': 1, 'edit': 1, 'delete': 1}</field>
         </record>
 
